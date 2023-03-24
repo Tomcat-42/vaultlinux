@@ -3,6 +3,6 @@
 DOCKER_BUILDKIT=1 docker build -t tomcat0x42/vaultlinux .
 
 # extract the binaries from the container
-docker create --name extract tomcat0x42/ciphervault
+docker create --name extract tomcat0x42/vaultlinux
 docker cp extract:/vaultlinux.iso ./
 docker rm extract
