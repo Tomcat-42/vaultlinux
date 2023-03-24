@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+
+docker push tomcat0x42/ciphervault:latest

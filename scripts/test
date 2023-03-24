@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+
+./ciphervault/ciphervault_test
