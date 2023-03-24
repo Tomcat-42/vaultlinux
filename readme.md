@@ -103,7 +103,7 @@ qemu-system-x86_64 --enable-kvm  -machine q35 -device intel-iommu  -cpu host -m 
 Or instead, just run the container:
 
 ```bash
-docker run -it tomcat0x42/vaultlinux
+docker run --device=/dev/kvm -it tomcat0x42/vaultlinux
 ```
 
 ## Software included
