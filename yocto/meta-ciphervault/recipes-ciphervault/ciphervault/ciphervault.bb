@@ -13,6 +13,9 @@ RDEPENDS:${PN} += "libcrypto libssl"
 SRC_URI[sha256sum] = "8e09c937b06fe663b210b005431d63933913d01ba2cc187b64c4f6d4e12d9aaf"
 SRC_URI = "https://github.com/Tomcat-42/ciphervault/releases/download/ciphervault/ciphervault.zip;protocol=http;subdir=ciphervault"
 
+FILES:${PN} += "/lib"
+FILES:${PN} += "/lib64
+
 S = "${WORKDIR}/ciphervault/ciphervault"
 
 do_install() {
@@ -22,4 +25,8 @@ do_install() {
         install -m 0755 ciphervault ${D}${bindir}
         install -m 0755 ciphervault_test ${D}${bindir}
         install -m 0755 ciphervault_bench ${D}${bindir}
+        # The binaries loader are linked agains /lib64/ld-linux-x86-64.so.2
+        ln -rs ${D}/lib ${D}/lib64
+        ls ../../
+
 }
