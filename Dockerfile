@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y gawk wget git diffstat unzip texinfo gc
 RUN apt-get install -y file
 RUN apt-get install -y vim
 
-#RUN update-alternatives --config python 
+#RUN update-alternatives --config python
 
 # Environment configuration
 ARG USERNAME=vaultlinux
@@ -37,8 +37,19 @@ WORKDIR /home/${USERNAME}/yocto
 COPY --chmod=0755 --chown=vaultlinux:vaultlinux ./yocto/ ./
 WORKDIR /home/${USERNAME}/yocto/poky
 
-FROM balenalib/qemux86-64-alpine as runner
+# Build
+RUN source oe-init-build-env && bitbake core-image-full-cmdline
+
+# Copy ISO
+RUN cp /home/${USERNAME}/yocto/poky/build/tmp/deploy/images/qemux86-64/core-image-full-cmdline-qemux86-64.iso /vaultlinux.iso
+
+FROM ubuntu:22.04 as runner
+
+# Install qemu
+RUN apt-get update && apt-get install -y qemu-system-x86
 
 COPY --from=builder \
-    /home/cppdev/ciphervault/ciphervault \
+    /vaultlinux.iso \
     ./
+
+CMD ["qemu-system-x86_64", "--enable-kvm", "-machine", "q35", "-m", "1024", "-cdrom", "vaultlinux.iso", "-device", "intel-iommu", "-cpu", "host", "-nographic", "-smp", "2", "-net", "nic,model=virtio", "-net", "user,hostfwd=tcp::2222-:22", "-serial", "mon:stdio"]
