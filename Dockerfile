@@ -37,10 +37,8 @@ WORKDIR /home/${USERNAME}/yocto
 COPY --chmod=0755 --chown=vaultlinux:vaultlinux ./yocto/ ./
 WORKDIR /home/${USERNAME}/yocto/poky
 
+FROM balenalib/qemux86-64-alpine as runner
 
-
-
-# COPY ./scripts/docker-entrypoint.sh /
-# COPY ./scripts/yocto-entrypoint.sh /
-#
-# ENTRYPOINT ["source oe-init-build-env"]
+COPY --from=builder \
+    /home/cppdev/ciphervault/ciphervault \
+    ./
